@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Signature Pad</title>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+  </head>
+  <body>
+    <h1>Signature Pad</h1>
+    <canvas id="signature-pad" width="500" height="200"></canvas>
+    <button id="clear">Clear</button>
+    <button id="save">Save</button>
+
+    <script>
+      const canvas = document.getElementById("signature-pad");
+      const signaturePad = new SignaturePad(canvas);
+
+      document.getElementById("clear").onclick = () => signaturePad.clear();
+
+      document.getElementById("save").onclick = () => {
+        if (signaturePad.isEmpty()) {
+          alert("Draw your signature first.");
+          return;
+        }
+        const dataUrl = signaturePad.toDataURL();
+
+        // Envía la firma a Coda
+        window.parent.postMessage({ type: "signatureData", signature: dataUrl }, "*");
+
+        alert("Signature sent to Coda.");
+      };
+    </script>
+  </body>
+</html>
